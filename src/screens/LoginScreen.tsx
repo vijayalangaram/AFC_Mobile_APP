@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 
+
+
 const LoginScreen = () => {
   const [email, setEmail] = useState('nnamdi.l@abc.com');
   const [password, setPassword] = useState('');
   const [rememberDevice, setRememberDevice] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     // Handle login logic here
     console.log('Login pressed');
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.contentimagetop}>
         <Image source={require('./images.png')} style={styles.image} />
       </View>
@@ -34,13 +40,23 @@ const LoginScreen = () => {
         />
 
         <Text style={styles.label}>Password*</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-          placeholder="***********"
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            placeholder="***********"
+          />
+          <TouchableOpacity
+            style={styles.eyeButton}
+            onPress={toggleShowPassword}
+          >
+            <Text style={styles.eyeIcon}>
+              {showPassword ? '👁\u0336' : '👁'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
@@ -65,10 +81,7 @@ const LoginScreen = () => {
 
         <Text style={styles.orText}>or login using</Text>
 
-        {/* <TouchableOpacity style={styles.faceIdButton}> */}
-          {/* //ext style={styles.faceIdText}>Face ID</Text> */}
-        <Image source={require('./faceid.png')}  style={styles.image} />
-        {/* </TouchableOpacity> */}
+        <Image source={require('./faceid.png')} style={styles.image} />
       </View>
     </SafeAreaView>
   );
@@ -88,11 +101,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
-    color: '#fff', // Changed to white for better visibility on blue background
+    color: '#fff',
   },
   subtitle: {
     fontSize: 16,
-    color: '#ccc', // Lighter color for better visibility
+    color: '#ccc',
     textAlign: 'center',
   },
   image: {
@@ -105,14 +118,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#00205B',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    borderBottomLeftRadius: 30, // Added bottom curves
-    borderBottomRightRadius: 30, // Added bottom curves
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     padding: 20,
     paddingTop: 40,
-    //marginTop: 10,
-    marginBottom: 10, // Add some bottom margin
-    flex: 0, // Changed from 1 to prevent expanding
-    height: '75%', // Set explicit height (adjust % as needed) 
+    marginBottom: 10,
+    flex: 0,
+    height: '75%',
   },
   contentimagetop: {
     padding: 10,
@@ -122,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 8,
-    color: '#fff', // Changed to white
+    color: '#fff',
   },
   input: {
     height: 50,
@@ -132,7 +144,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 20,
     fontSize: 16,
-    backgroundColor: '#fff', // Added white background for inputs
+    backgroundColor: '#fff',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 50,
+    paddingHorizontal: 15,
+    fontSize: 16,
+  },
+  eyeButton: {
+    padding: 10,
+  },
+  eyeIcon: {
+    fontSize: 20,
+    lineHeight: 24, // Helps with vertical alignment
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -143,7 +177,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 1,
-    borderColor: '#fff', // Changed to white
+    borderColor: '#fff',
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
@@ -151,7 +185,7 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: {
     fontSize: 14,
-    color: '#fff', // Changed to white
+    color: '#fff',
   },
   checkboxUnchecked: {
     fontSize: 14,
@@ -159,7 +193,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     fontSize: 14,
-    color: '#fff', // Changed to white
+    color: '#fff',
   },
   loginButton: {
     backgroundColor: '#0071CF',
@@ -176,22 +210,9 @@ const styles = StyleSheet.create({
   },
   orText: {
     textAlign: 'center',
-    color: '#fff', // Changed to white
+    color: '#fff',
     marginBottom: 20,
-  },
-  faceIdButton: {
-    borderWidth: 1,
-    borderColor: '#fff', // Changed to white
-    height: 50,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  faceIdText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#fff', // Changed to white
   },
 });
 
-export default LoginScreen;
+export default LoginScreen; 
