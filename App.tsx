@@ -28,6 +28,7 @@ const App = () => {
               headerTintColor: '#fff',
             }} 
           />
+
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
