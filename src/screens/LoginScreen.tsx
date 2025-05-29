@@ -41,6 +41,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // Your login logic here
+     navigation.navigate('WelcomeScreen');
   };
 
   const toggleShowPassword = () => {

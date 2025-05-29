@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView, TextInput, Platform } from 'react-native';
 import SMSRetriever, { SmsListenerEvent } from 'react-native-sms-retriever';
 
 interface ForgotPasswordScreenProps {
-  navigation: any; // You should replace 'any' with your proper navigation type
+  navigation: any; // Replace with your proper navigation type
 }
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation }) => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const [otpError, setOtpError] = useState<string>('');
+  const otpInputRefs = useRef<Array<TextInput | null>>([]);
+
+  // Initialize refs array
+  useEffect(() => {
+    otpInputRefs.current = otpInputRefs.current.slice(0, otp.length);
+  }, [otp]);
 
   // Check if OTP is complete
   useEffect(() => {
@@ -51,7 +57,6 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
   }, []);
 
   const extractOtpFromSms = (message: string): string | null => {
-    // This regex looks for a 6-digit number in the message
     const otpRegex = /\b\d{6}\b/;
     const match = message.match(otpRegex);
     return match ? match[0] : null;
@@ -63,18 +68,21 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
       newOtp[index] = text;
       setOtp(newOtp);
 
-      // Auto focus to next input
+      // Auto focus to next input if a digit was entered
       if (text && index < 5) {
-        // You'll need to add refs to your TextInputs for this to work
-        // This is just a placeholder for the logic
+        otpInputRefs.current[index + 1]?.focus();
+      }
+
+      // Auto focus to previous input if backspace was pressed and current is empty
+      if (text === '' && index > 0) {
+        otpInputRefs.current[index - 1]?.focus();
       }
     }
   };
 
   const handleVerifyOtp = () => {
-    // Here you would typically verify the OTP with your backend
-    // For demo purposes, we'll just navigate to welcome screen
-    navigation.navigate('Login'); // Make sure you have this screen in your navigator
+    navigation.navigate('Login');
+      // navigation.navigate('WelcomeScreen');
   };
 
   return (
@@ -102,6 +110,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
           {otp.map((digit, index) => (
             <TextInput
               key={index}
+              ref={(ref) => (otpInputRefs.current[index] = ref)} 
               style={[styles.otpBox, otpError ? styles.otpBoxError : null]}
               value={digit}
               onChangeText={(text: string) => handleOtpChange(text, index)}
@@ -109,6 +118,11 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
               maxLength={1}
               textAlign="center"
               autoFocus={index === 0}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Backspace' && !digit && index > 0) {
+                  otpInputRefs.current[index - 1]?.focus();
+                }
+              }}
             />
           ))}
         </View>
@@ -136,7 +150,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff', 
   },
   contentimagetop: {
     padding: 10,

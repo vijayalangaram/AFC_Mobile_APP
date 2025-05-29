@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/screens/LoginScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen'; // We'll create this
+import WelcomeScreen from './src/screens/WelcomeScreen';
+// import WelcomeScreen from './src/screens/WelcomeScreen'; // Make sure path is correct
 
 const Stack = createStackNavigator();
 
@@ -28,7 +30,7 @@ const App = () => {
               headerTintColor: '#fff',
             }} 
           />
-
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
