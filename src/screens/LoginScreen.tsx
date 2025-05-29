@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 
-
-
 const LoginScreen = () => {
   const [email, setEmail] = useState('nnamdi.l@abc.com');
   const [password, setPassword] = useState('');
@@ -10,8 +8,6 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    // Handle login logic here
-    console.log('Login pressed');
   };
 
   const toggleShowPassword = () => {
@@ -98,22 +94,23 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 24,
-    fontWeight: 'bold',
+     fontWeight: '800', 
     marginBottom: 8,
     textAlign: 'center',
     color: '#fff',
   },
   subtitle: {
-    fontSize: 16,
-    color: '#ccc',
+    fontSize: 14,
+    color: '#fff', 
     textAlign: 'center',
+     fontWeight: '800', 
   },
   image: {
     width: 200,
     height: 130,
     resizeMode: 'contain',
     alignSelf: 'center',
-  },  
+  },
   content: {
     backgroundColor: '#00205B',
     borderTopLeftRadius: 30,
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
   },
   orText: {
