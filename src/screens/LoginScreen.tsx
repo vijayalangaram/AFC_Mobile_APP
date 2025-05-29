@@ -41,7 +41,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // Your login logic here
-     navigation.navigate('WelcomeScreen');
+    navigation.navigate('WelcomeScreen');
   };
 
   const toggleShowPassword = () => {
@@ -116,8 +116,8 @@ const LoginScreen = () => {
           <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
-        </View> 
- 
+        </View>
+
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={styles.checkbox}
@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: 10,
+    fontWeight: '800',
   },
   orText: {
     textAlign: 'center',
