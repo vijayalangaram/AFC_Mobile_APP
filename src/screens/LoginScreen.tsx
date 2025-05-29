@@ -1,17 +1,69 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, SafeAreaView, Alert } from 'react-native';
+import ReactNativeBiometrics from 'react-native-biometrics';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('nnamdi.l@abc.com');
   const [password, setPassword] = useState('');
   const [rememberDevice, setRememberDevice] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [biometricAttempted, setBiometricAttempted] = useState(false);
+
+  useEffect(() => {
+    checkBiometricSupport();
+  }, []);
+
+  useEffect(() => {
+    if (isBiometricSupported && !biometricAttempted) {
+      handleFaceIdLogin();
+    }
+  }, [isBiometricSupported, biometricAttempted]);
+
+  const checkBiometricSupport = async () => {
+    const rnBiometrics = new ReactNativeBiometrics();
+
+    try {
+      const { available, biometryType } = await rnBiometrics.isSensorAvailable();
+
+      if (available && (biometryType === 'FaceID' || biometryType === 'Biometrics')) {
+        setIsBiometricSupported(true);
+      }
+    } catch (error) {
+      console.log('Biometric check error:', error);
+    }
+  };
 
   const handleLogin = () => {
+    // Your login logic here
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleFaceIdLogin = async () => {
+    setBiometricAttempted(true);
+    const rnBiometrics = new ReactNativeBiometrics();
+
+    try {
+      const { success } = await rnBiometrics.simplePrompt({
+        promptMessage: 'Authenticate to login',
+        cancelButtonText: 'Cancel',
+      });
+
+      if (success) {
+        Alert.alert('Success', 'Authentication successful!');
+        // Proceed with your login logic
+      }
+    } catch (error) {
+      console.log('Biometric error:', error);
+      // Don't show alert for automatic attempts to avoid annoying users
+      if (biometricAttempted) {
+        Alert.alert('Error', 'Authentication failed');
+      }
+    }
   };
 
   return (
@@ -75,9 +127,17 @@ const LoginScreen = () => {
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
 
-        <Text style={styles.orText}>or login using</Text>
-
-        <Image source={require('./faceid.png')} style={styles.image} />
+        {isBiometricSupported && (
+          <>
+            <Text style={styles.orText}>or login using</Text>
+            <TouchableOpacity
+              onPress={handleFaceIdLogin}
+              style={styles.biometricButton}
+            >
+              <Image source={require('./faceid.png')} style={styles.biometricImage} />
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -94,16 +154,16 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 24,
-     fontWeight: '800', 
+    fontWeight: '800',
     marginBottom: 8,
     textAlign: 'center',
     color: '#fff',
   },
   subtitle: {
     fontSize: 14,
-    color: '#fff', 
+    color: '#fff',
     textAlign: 'center',
-     fontWeight: '800', 
+    fontWeight: '800',
   },
   image: {
     width: 200,
@@ -209,6 +269,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     marginBottom: 20,
+  },
+  biometricButton: {
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  biometricImage: {
+    // width: 50,
+    //  height: 50,
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    alignSelf: 'center',
   },
 });
 
