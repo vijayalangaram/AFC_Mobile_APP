@@ -2,8 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, SafeAreaView, Alert } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState('nnamdi.l@abc.com');
   const [password, setPassword] = useState('');
   const [rememberDevice, setRememberDevice] = useState(false);
@@ -106,6 +110,13 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
+        {/* Below your passwordContainer */}
+        <View style={styles.forgotPasswordContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={styles.checkbox}
@@ -117,6 +128,7 @@ const LoginScreen = () => {
               <Text style={styles.checkboxUnchecked}>□</Text>
             )}
           </TouchableOpacity>
+
           <Text style={styles.checkboxLabel}>Remember this device</Text>
         </View>
 
@@ -229,6 +241,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  forgotPasswordContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: '#fff',
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
   checkbox: {
     width: 20,
